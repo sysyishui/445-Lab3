@@ -1,21 +1,19 @@
 import java.io.*;
-import java.util.Random;
 
 /** A linked implementation of the ADT List.
  *
  * This code is from Chapter 14 of
  * Data Structures and Abstractions with Java 4/e
- *      @author Frank M. Carrano
+ *      by Frank M. Carrano
  *
  * Modifications were made by Charles Hoot:
  * The toString method is overwritten to give a nice display of the items in
  * the list in this format { <1> <2> <3> <4> }
  *
  * An alternate display method has been created to print the list one item
- * to a line along with the index
+ * to a line along with the index.
  *
- *
-  * @version 4.0
+ * @version 4.0
  */
 class LList<T> implements ListInterface<T> {
 
@@ -24,11 +22,11 @@ class LList<T> implements ListInterface<T> {
 
     public LList() {
         initializeDataFields();
-    } // end default constructor
+    }
 
     public void clear() {
         initializeDataFields();
-    } // end clear
+    }
 
     // Initialize the class's data fields to indicate an empty list.
     private void initializeDataFields() {
@@ -42,11 +40,10 @@ class LList<T> implements ListInterface<T> {
             firstNode = newNode;
         } else {
             Node lastNode = getNodeAt(numberOfEntries);
-            lastNode.setNextNode(newNode); // Make last node reference new node
-        } // end if
-
+            lastNode.setNextNode(newNode);
+        }
         numberOfEntries++;
-    } // end add
+    }
 
     public void add(int newPosition, T newEntry) {
         if ((newPosition >= 1) && (newPosition <= numberOfEntries + 1)) {
@@ -64,7 +61,7 @@ class LList<T> implements ListInterface<T> {
         } else {
             throw new IndexOutOfBoundsException("Illegal position given to add operation.");
         }
-    } // end add
+    }
 
     public T remove(int givenPosition) {
         T result = null;
@@ -85,7 +82,7 @@ class LList<T> implements ListInterface<T> {
         } else {
             throw new IndexOutOfBoundsException("Illegal position given to remove operation.");
         }
-    } // end remove
+    }
 
     public boolean contains(T anEntry) {
         boolean found = false;
@@ -98,7 +95,7 @@ class LList<T> implements ListInterface<T> {
             }
         }
         return found;
-    } // end contains
+    }
 
     public T getEntry(int givenPosition) {
         if ((givenPosition >= 1) && (givenPosition <= numberOfEntries)) {
@@ -107,13 +104,8 @@ class LList<T> implements ListInterface<T> {
         } else {
             throw new IndexOutOfBoundsException("Illegal position given to getEntry operation.");
         }
-    } // end getEntry
+    }
 
-    /** Replaces the entry at a given position in the list.
-     *  @param givenPosition The position of the entry to be replaced.
-     *  @param newEntry The new entry that will replace the old one.
-     *  @return The original entry that was replaced.
-     */
     public T replace(int givenPosition, T newEntry) {
         if ((givenPosition >= 1) && (givenPosition <= numberOfEntries)) {
             assert !isEmpty();
@@ -124,7 +116,7 @@ class LList<T> implements ListInterface<T> {
         } else {
             throw new IndexOutOfBoundsException("Illegal position given to replace operation.");
         }
-    } // end replace
+    }
 
     public int getLength() {
         return numberOfEntries;
@@ -132,7 +124,7 @@ class LList<T> implements ListInterface<T> {
 
     public boolean isEmpty() {
         return numberOfEntries == 0;
-    } // end isEmpty
+    }
 
     public T[] toArray() {
         @SuppressWarnings("unchecked")
@@ -145,107 +137,47 @@ class LList<T> implements ListInterface<T> {
             index++;
         }
         return result;
-    } // end toArray
+    }
 
     private Node getNodeAt(int givenPosition) {
-        assert (firstNode != null)
-                && (1 <= givenPosition) && (givenPosition <= numberOfEntries);
+        assert (firstNode != null) && (1 <= givenPosition) && (givenPosition <= numberOfEntries);
         Node currentNode = firstNode;
         for (int counter = 1; counter < givenPosition; counter++) {
             currentNode = currentNode.getNextNode();
         }
         return currentNode;
-    } // end getNodeAt
-
-    // Display the contents of the list
-    public void display() {
-        Node currentNode = firstNode;
-        System.out.print("{ ");
-        while (currentNode != null) {
-            System.out.print("<" + currentNode.getData() + "> ");
-            currentNode = currentNode.getNextNode();
-        }
-        System.out.println("}");
-    } // end display
-
-    // Reverse the order of items in a list.
-  // Reverse the order of items in a list.
-public void reverse() {
-    if (isEmpty() || numberOfEntries == 1) {
-        return; // No need to reverse if the list is empty or has only one element
     }
 
-    Node previous = null;
-    Node current = firstNode;
-    Node next = null;
-
-    while (current != null) {
-        next = current.getNextNode(); // Store next node
-        current.setNextNode(previous); // Reverse the current node's pointer
-        previous = current; // Move pointers forward
-        current = next;
-    }
-
-    firstNode = previous; // Set the last node as the new head
-}// end reverse
-
-    // Randomly permute the list.
-    public void randomPermutation() {
+    /** Reverse the order of items in the list. */
+    public void reverse() {
         if (isEmpty() || numberOfEntries == 1) {
-            return;
+            return; // Nothing to reverse for empty or single-element lists.
         }
 
-        Random rand = new Random();
-        for (int i = 1; i <= numberOfEntries; i++) {
-            int randomIndex = rand.nextInt(numberOfEntries) + 1;
-            T temp = getEntry(i);
-            replace(i, getEntry(randomIndex));
-            replace(randomIndex, temp);
-        }
-    } // end randomPermutation
+        Node previous = null;
+        Node current = firstNode;
+        Node next = null;
 
-    // Move the item at the given position to the back.
-    public void moveToBack(int from) {
-        if (from < 1 || from > numberOfEntries) {
-            throw new IndexOutOfBoundsException("Invalid index.");
+        while (current != null) {
+            next = current.getNextNode();  // Store the next node
+            current.setNextNode(previous); // Reverse the current node's pointer
+            previous = current;            // Move to the next node
+            current = next;
         }
 
-        T item = remove(from);
-        add(item);
-    } // end moveToBack
+        firstNode = previous; // Set the last node as the new head
+    }
 
-    // Interleave the list by splitting into two halves and alternating the elements.
-    public void interleave() {
-        if (numberOfEntries <= 1) {
-            return;
+    /** Display the list with indices. */
+    public void display() {
+        int index = 1;
+        Node currentNode = firstNode;
+        while (currentNode != null) {
+            System.out.println(index + ": " + currentNode.getData());
+            currentNode = currentNode.getNextNode();
+            index++;
         }
-
-        int mid = (numberOfEntries + 1) / 2;
-        LList<T> firstHalf = new LList<>();
-        LList<T> secondHalf = new LList<>();
-
-        for (int i = 1; i <= mid; i++) {
-            firstHalf.add(getEntry(i));
-        }
-
-        for (int i = mid + 1; i <= numberOfEntries; i++) {
-            secondHalf.add(getEntry(i));
-        }
-
-        clear();
-
-        int i = 1, j = 1;
-        while (i <= firstHalf.getLength() || j <= secondHalf.getLength()) {
-            if (i <= firstHalf.getLength()) {
-                add(firstHalf.getEntry(i));
-                i++;
-            }
-            if (j <= secondHalf.getLength()) {
-                add(secondHalf.getEntry(j));
-                j++;
-            }
-        }
-    } // end interleave
+    }
 
     private class Node {
 
@@ -276,5 +208,5 @@ public void reverse() {
         private void setNextNode(Node nextNode) {
             next = nextNode;
         }
-    } // end Node
+    }
 }
