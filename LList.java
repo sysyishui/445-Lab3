@@ -150,23 +150,38 @@ class LList<T> implements ListInterface<T> {
 
     /** Reverse the order of items in the list. */
     public void reverse() {
-        if (isEmpty() || numberOfEntries == 1) {
-            return; // Nothing to reverse for empty or single-element lists.
-        }
-
-        Node previous = null;
-        Node current = firstNode;
-        Node next = null;
-
-        while (current != null) {
-            next = current.getNextNode();  // Store the next node
-            current.setNextNode(previous); // Reverse the current node's pointer
-            previous = current;            // Move to the next node
-            current = next;
-        }
-
-        firstNode = previous; // Set the last node as the new head
+    if (isEmpty()) {
+        System.out.println("Reversing an empty list.");
+        return; // No need to reverse an empty list
     }
+
+    if (numberOfEntries == 1) {
+        System.out.println("Reversing a single-element list. No action needed.");
+        return; // No need to reverse a single element
+    }
+
+    Node previous = null;
+    Node current = firstNode;
+    Node next = null;
+
+    // Debugging: Print list before reversing
+    System.out.println("Reversing list: ");
+    display(); // Add a display call to see the list before reversal
+
+    while (current != null) {
+        next = current.getNextNode();
+        current.setNextNode(previous);
+        previous = current;
+        current = next;
+    }
+
+    firstNode = previous; // New head of the reversed list
+
+    // Debugging: Print list after reversing
+    System.out.println("List after reversing: ");
+    display();
+}
+
 
     /** Display the list with indices. */
     public void display() {
